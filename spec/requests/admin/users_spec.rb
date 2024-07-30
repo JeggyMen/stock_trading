@@ -39,4 +39,12 @@ RSpec.describe "Admin::Users", type: :request do
     end
   end
 
+  describe "GET /show" do
+    it "renders the show user details page" do
+      get admin_user_path(user)
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(user.email)
+    end
+  end
+
 end

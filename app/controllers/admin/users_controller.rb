@@ -1,7 +1,7 @@
 class Admin::UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :authorize_admin!
-    before_action :set_user, only: [:edit, :update]
+    before_action :set_user, only: [:show, :edit, :update]
   
     def new
       @user = User.new
@@ -28,6 +28,9 @@ class Admin::UsersController < ApplicationController
           flash[:alert] = 'Failed to update user.'
           render :edit
         end
+    end
+
+    def show
     end
 
   

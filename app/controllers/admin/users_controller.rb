@@ -1,6 +1,7 @@
 class Admin::UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :authorize_admin!
+    before_action :set_user, only: [:edit, :update]
   
     def new
       @user = User.new
@@ -15,8 +16,26 @@ class Admin::UsersController < ApplicationController
         render :new
       end
     end
+
+    def edit
+    end
+
+    def update
+        if @user.update(user_params)
+          flash[:notice] = 'User was successfully updated.'
+          redirect_to admin_dashboard_path
+        else
+          flash[:alert] = 'Failed to update user.'
+          render :edit
+        end
+    end
+
   
     private
+
+    def set_user
+        @user = User.find(params[:id])
+    end
   
     def user_params
       params.require(:user).permit(:email, :password, :password_confirmation)
@@ -25,5 +44,5 @@ class Admin::UsersController < ApplicationController
     def authorize_admin!
       redirect_to root_path, alert: 'Not authorized' unless current_user.admin?
     end
-  end
+end
   

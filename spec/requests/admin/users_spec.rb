@@ -20,4 +20,23 @@ RSpec.describe "Admin::Users", type: :request do
       expect(User.last.role).to eq('trader')
     end
   end
+
+  describe "GET /edit" do
+    it "renders the edit user form" do
+      get edit_admin_user_path(user)
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Edit User")
+    end
+  end
+
+  describe "PATCH /update" do
+    it "updates the user's details" do
+      patch admin_user_path(user), params: { user: { email: 'newemail@example.com' } }
+      expect(response).to redirect_to(admin_dashboard_path)
+      user.reload
+      expect(user.email).to eq('newemail@example.com')
+      expect(flash[:notice]).to eq('User was successfully updated.')
+    end
+  end
+
 end

@@ -7,15 +7,13 @@ class Users::SessionsController < Devise::SessionsController
       set_flash_message!(:notice, :signed_in)
       sign_in(resource_name, resource)
   
-      # Check the role
-      if params[:user][:role] != resource.role
-        sign_out(resource)
-        redirect_to new_user_session_path, alert: 'Invalid role selected for this user.'
+    # Redirect based on user role
+      if resource.role == 'admin'
+        redirect_to admin_authenticated_root_path
       else
-        respond_with resource, location: after_sign_in_path_for(resource)
+        redirect_to client_dashboard_pathra
       end
     end
-  
     protected
   
     # If you have extra params to permit, append them to the sanitizer.

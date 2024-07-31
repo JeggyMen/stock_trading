@@ -3,6 +3,8 @@ require 'rails_helper'
 
 RSpec.describe "Admin::Users", type: :request do
   let(:admin) { create(:user, :admin) } 
+  let!(:trader1) { create(:user, :trader) }
+  let!(:trader2) { create(:user, :trader) }
 
   before do
     sign_in admin 
@@ -44,6 +46,15 @@ RSpec.describe "Admin::Users", type: :request do
       get admin_user_path(user)
       expect(response).to have_http_status(:ok)
       expect(response.body).to include(user.email)
+    end
+  end
+
+  describe "GET /admin/dashboard" do
+    it "displays all traders" do
+      get admin_dashboard_path
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(trader1.email)
+      expect(response.body).to include(trader2.email)
     end
   end
 

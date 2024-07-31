@@ -4,10 +4,8 @@ Rails.application.routes.draw do
 
  
   authenticated :user, lambda { |u| u.admin? } do
-    root 'admins#dashboard', as: :admin_authenticated_root
-
     namespace :admin do
-      get 'dashboard', to: 'dashboards#index', as: 'dashboard'
+      get 'dashboard', to: 'dashboards#index', as: :authenticated_root
       resources :users 
     end
   end

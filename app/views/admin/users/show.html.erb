@@ -5,5 +5,5 @@
 <p><strong>Created At:</strong> <%= @user.created_at.strftime('%B %d, %Y') %></p>
 <p><strong>Updated At:</strong> <%= @user.updated_at.strftime('%B %d, %Y') %></p>
 
-<%= link_to 'Back to Admin Dashboard', admin_dashboard_path %>
+<%= link_to 'Back to Admin Dashboard', admin_authenticated_root_path %>
 <%= link_to 'Edit User', edit_admin_user_path(@user) %>

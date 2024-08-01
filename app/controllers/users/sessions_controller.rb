@@ -11,7 +11,7 @@ class Users::SessionsController < Devise::SessionsController
       if resource.role == 'admin'
         redirect_to admin_authenticated_root_path
       else
-        redirect_to client_dashboard_pathra
+        redirect_to client_dashboard_path
       end
     end
     protected

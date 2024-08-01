@@ -1,8 +1,35 @@
 <h1>Admin Dashboard</h1>
 <p>Welcome to the admin dashboard, <%= current_user.email %>!</p>
 
-<h2>Traders List</h2>
+<h2>Pending Traders</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Created At</th>
+      <th>Approve</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @pending_traders.present? %>
+      <% @pending_traders.each do |trader| %>
+        <tr>
+          <td><%= trader.email %></td>
+          <td><%= trader.created_at.strftime('%B %d, %Y') %></td>
+          <td>
+          <%= link_to 'Approve', approve_admin_user_path(trader), method: :put, remote: true, data: { confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="3">No pending traders found.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
+<h2>Traders List</h2>
 <table>
   <thead>
     <tr>
@@ -24,7 +51,7 @@
       <% end %>
     <% else %>
       <tr>
-        <td colspan="2">No traders found.</td>
+        <td colspan="4">No traders found.</td>
       </tr>
     <% end %>
   </tbody>

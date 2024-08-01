@@ -8,4 +8,4 @@ class HomeController < ApplicationController
       redirect_to client_dashboard_path
     end
   end
-end
+end 

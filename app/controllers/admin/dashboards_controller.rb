@@ -3,8 +3,8 @@ class Admin::DashboardsController < ApplicationController
     before_action :authorize_admin!
   
     def index
-      @traders = User.where(role: 'trader')
-       Rails.logger.debug "Traders: #{@traders.inspect}"
+      @pending_traders = User.trader.where(approved: false)
+      @traders = User.trader.where(approved: true)
     end
   
     private

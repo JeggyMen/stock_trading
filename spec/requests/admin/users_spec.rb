@@ -5,6 +5,9 @@ RSpec.describe "Admin::Users", type: :request do
   let(:admin) { create(:user, :admin) } 
   let!(:trader1) { create(:user, :trader) }
   let!(:trader2) { create(:user, :trader) }
+  let!(:pending_trader) { create(:user, :trader, approved: false) }
+  let!(:approved_trader) { create(:user, :trader, approved: true) }
+
 
   before do
     sign_in admin 
@@ -58,4 +61,22 @@ RSpec.describe "Admin::Users", type: :request do
     end
   end
 
+  describe "PATCH /admin/users/:id/approve" do
+    it "approves a pending trader" do
+      patch approve_admin_user_path(pending_trader)
+      expect(response).to redirect_to(admin_dashboard_path)
+      pending_trader.reload
+      expect(pending_trader.approved).to be_truthy
+      expect(flash[:notice]).to eq('User was successfully approved.')
+    end
+  end
+
+  describe "GET /admin/dashboard" do
+    it "displays only pending traders" do
+      get admin_dashboard_path
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(pending_trader.email)
+      expect(response.body).not_to include(approved_trader.email)
+    end
+  end
 end

@@ -1,7 +1,7 @@
 class Admin::UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :authorize_admin!
-    before_action :set_user, only: [:show, :edit, :update]
+    before_action :set_user, only: [:show, :edit, :update , :approve , ]
   
     def new
       @user = User.new
@@ -10,8 +10,9 @@ class Admin::UsersController < ApplicationController
     def create
       @user = User.new(user_params)
       @user.role = 'trader' 
+      @user.approved = false
       if @user.save
-        redirect_to admin_users_path, notice: 'User was successfully created.'
+        redirect_to admin_authenticated_root_path, notice: 'User was successfully created.'
       else
         render :new
       end
@@ -31,6 +32,15 @@ class Admin::UsersController < ApplicationController
     end
 
     def show
+    end
+
+
+    def approve
+      if @user.update(approved: true)
+        redirect_to admin_authenticated_root_path, notice: 'Trader was successfully approved.'
+      else
+        redirect_to admin_authenticated_root_path, alert: 'Failed to approve trader.'
+      end
     end
 
   

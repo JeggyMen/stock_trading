@@ -6,4 +6,3 @@ class UserMailer < ApplicationMailer
         mail(to: @user.email, subject: 'Welcome to the world of Trading!')
       end
     end
-end

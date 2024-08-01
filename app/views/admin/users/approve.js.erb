@@ -1,0 +1,7 @@
+<% if @user.approved %>
+  // Remove the approved trader from the pending list
+  $("#trader_<%= @user.id %>").remove();
+<% else %>
+  // Optionally, handle the error case
+  alert('Failed to approve trader.');
+<% end %>

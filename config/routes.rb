@@ -1,19 +1,26 @@
 Rails.application.routes.draw do
+  if Rails.env.development?
+    mount LetterOpenerWeb::Engine, at: "/letter_opener"
+  end
+
   get 'home/index'
   devise_for :users, controllers: { sessions: 'users/sessions' }
 
  
-  authenticated :user, lambda { |u| u.admin? } do
+  authenticated :user, ->(u) { u.admin? } do
     namespace :admin do
       get 'dashboard', to: 'dashboards#index', as: :authenticated_root
-      resources :users 
+      resources :users do
+        member do
+          get :approve
+        end
+      end
     end
   end
   
-  authenticated :user, lambda { |u| u.trader? } do
+  authenticated :user, ->(u) { u.trader? } do
     root 'clients#dashboard', as: :client_dashboard
   end
-
  
   root to: 'home#index'
 end

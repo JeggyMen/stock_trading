@@ -10,6 +10,9 @@ class User < ApplicationRecord
   after_create :set_pending_status
   before_update :check_approval
   before_destroy :prevent_admin_deletion
+  after_create :send_welcome_email
+  after_create :send_pending_approval_email
+  before_update :send_approval_email, if: :approved_changed?
 
   private
 
@@ -18,12 +21,11 @@ class User < ApplicationRecord
   end
 
   def set_pending_status
-    self.update_column(:approved, false) if trader?
+    update_column(:approved, false) if trader?
   end
 
   def check_approval
     if approved_changed?(from: false, to: true)
-      # Perform any additional actions when a user is approved
     end
   end
 
@@ -32,6 +34,21 @@ class User < ApplicationRecord
     if role == 'admin'
       errors.add(:base, "Admin users cannot be deleted")
       throw :abort
+    end
+  end
+  
+  def send_welcome_email
+    login_url = 'http://rufustrade.com/login'
+    UserMailer.welcome_email(self, login_url).deliver_later
+   end
+
+   def send_pending_approval_email
+    UserMailer.pending_approval_email(self).deliver_later
+  end
+
+  def send_approval_email
+    if self.approved && self.approved_changed?
+      UserMailer.approval_email(self).deliver_later
     end
   end
 end

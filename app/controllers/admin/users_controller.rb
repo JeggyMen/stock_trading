@@ -3,6 +3,10 @@ class Admin::UsersController < ApplicationController
     before_action :authorize_admin!
     before_action :set_user, only: [:show, :edit, :update , :approve , ]
   
+    def dashboard
+      @pending_traders = User.where(role: 'trader', approved: false)
+    end
+
     def new
       @user = User.new
     end
@@ -22,13 +26,12 @@ class Admin::UsersController < ApplicationController
     end
 
     def update
-        if @user.update(user_params)
-          flash[:notice] = 'User was successfully updated.'
-          redirect_to admin_authenticated_root_path
-        else
-          flash[:alert] = 'Failed to update user.'
-          render :edit
-        end
+      if @user.update(user_params)
+        flash[:notice] = 'Trader was successfully updated.'
+        redirect_to admin_authenticated_root_path
+      else
+        render :edit
+      end
     end
 
     def show
@@ -39,7 +42,8 @@ class Admin::UsersController < ApplicationController
       if @user.update(approved: true)
         redirect_to admin_authenticated_root_path, notice: 'Trader was successfully approved.'
       else
-        redirect_to admin_authenticated_root_path, alert: 'Failed to approve trader.'
+        redirect_to admin_
+        authenticated_root_path, alert: 'Failed to approve trader.'
       end
     end
 

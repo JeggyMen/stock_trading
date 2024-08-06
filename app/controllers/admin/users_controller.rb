@@ -1,7 +1,7 @@
 class Admin::UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :authorize_admin!
-    before_action :set_user, only: [:show, :edit, :update , :approve , ]
+    before_action :set_user, only: [:show, :edit, :update , :approve  ]
   
     def dashboard
       @pending_traders = User.where(role: 'trader', approved: false)
@@ -42,8 +42,7 @@ class Admin::UsersController < ApplicationController
       if @user.update(approved: true)
         redirect_to admin_authenticated_root_path, notice: 'Trader was successfully approved.'
       else
-        redirect_to admin_
-        authenticated_root_path, alert: 'Failed to approve trader.'
+        redirect_to admin_authenticated_root_path, alert: 'Failed to approve trader.'
       end
     end
 

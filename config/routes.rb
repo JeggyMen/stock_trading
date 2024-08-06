@@ -18,9 +18,11 @@ Rails.application.routes.draw do
     end
   end
   
-  authenticated :user, ->(u) { u.trader? } do
+  authenticated :user, ->(u) { u.trader? && u.approved? } do
     root 'clients#dashboard', as: :client_dashboard
   end
+
+  get 'pending_approval', to: 'traders#pending_approval', as: :pending_approval
  
   root to: 'home#index'
 end

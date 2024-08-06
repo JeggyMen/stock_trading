@@ -1,0 +1,31 @@
+<!-- app/views/stocks/index.html.erb -->
+<h1>Stocks List</h1>
+
+<% if flash[:notice] %>
+  <div class="notice">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stocks.each do |stock| %>
+      <tr>
+        <td><%= stock.symbol %></td>
+        <td><%= stock.price %></td>
+        <td>
+          <%= link_to 'Buy', add_to_portfolio_stock_path(stock), method: :post %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'Back to Dashboard', client_dashboard_path %>
+

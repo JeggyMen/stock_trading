@@ -1,2 +1,23 @@
 <h1>Trader Dashboard</h1>
-<p>Welcome to your dashboard.</p>
+<p>Welcome to your dashboard, <%= current_user.email.split('@').first %>!</p>
+
+<h2>My Portfolio</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @stocks.each do |stock| %>
+      <tr>
+        <td><%= stock.symbol %></td>
+        <td><%= stock.price %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to 'View Stocks List', stocks_index_path %>

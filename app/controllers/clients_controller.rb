@@ -3,6 +3,7 @@ class ClientsController < ApplicationController
   before_action :authorize_client
 
   def dashboard
+    @stocks = current_user.stocks
   end
 
   private

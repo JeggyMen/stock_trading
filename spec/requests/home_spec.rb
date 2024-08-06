@@ -20,15 +20,27 @@ RSpec.describe "Homes", type: :request do
       end
     end
 
-    context "when the user is a trader" do
+    context "when the user is an approved trader" do
       before do
-        user.update(role: 'trader') 
+        user.update(role: 'trader', approved: true) 
       end
 
       it "redirects to the trader dashboard" do
         get home_index_path
         expect(response).to have_http_status(:found) 
         expect(response).to redirect_to(client_dashboard_path)
+      end
+    end
+
+    context "when the user is a pending trader" do
+      before do
+        user.update(role: 'trader', approved: false) 
+      end
+
+      it "redirects to the pending approval page" do
+        get home_index_path
+        expect(response).to have_http_status(:found) 
+        expect(response).to redirect_to(pending_approval_path)
       end
     end
   end

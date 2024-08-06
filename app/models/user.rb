@@ -14,6 +14,9 @@ class User < ApplicationRecord
   after_create :send_pending_approval_email
   before_update :send_approval_email, if: :approved_changed?
 
+  has_many :user_stocks
+  has_many :stocks, through: :user_stocks
+  
   private
 
   def set_default_role

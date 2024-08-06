@@ -2,6 +2,7 @@ class TradersController < ApplicationController
   before_action :authenticate_user!
   before_action :check_approval, except: :pending_approval
 
+  
   def pending_approval
   end
 

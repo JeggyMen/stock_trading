@@ -8,9 +8,9 @@ RSpec.describe "Dashboards", type: :request do
   end
 
   describe "GET /client" do
-    it "returns http success" do
+    it "returns http found" do
       get client_dashboard_path
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:found)
     end
   end
 end

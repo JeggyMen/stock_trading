@@ -3,8 +3,7 @@ class Admin::DashboardsController < ApplicationController
     before_action :authorize_admin!
   
     def index
-      @pending_traders = User.trader.where(approved: false)
-      @traders = User.trader.where(approved: true)
+        @traders = User.trader.where(approved: true)
     end
   
     private

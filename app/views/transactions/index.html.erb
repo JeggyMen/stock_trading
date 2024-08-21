@@ -1,0 +1,26 @@
+<h1>My Transactions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Stock</th>
+      <th>Transaction Type</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Total</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.stock.symbol %></td>
+        <td><%= transaction.transaction_type %></td>
+        <td><%= transaction.quantity %></td>
+        <td><%= number_to_currency(transaction.price) %></td>
+        <td><%= number_to_currency(transaction.quantity * transaction.price) %></td>
+        <td><%= transaction.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,30 @@
+<h1>All Transactions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Trader</th>
+      <th>Stock</th>
+      <th>Transaction Type</th>
+      <th>Quantity</th>
+      <th>Price</th>
+      <th>Total</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @transactions.each do |transaction| %>
+      <tr>
+        <td><%= transaction.user.email %></td>
+        <td><%= transaction.stock.symbol %></td>
+        <td><%= transaction.transaction_type %></td>
+        <td><%= transaction.quantity %></td>
+        <td><%= number_to_currency(transaction.price, unit: "₱") %></td>
+        <td><%= number_to_currency(transaction.quantity * transaction.price, unit: "₱") %></td>
+        <td><%= transaction.created_at %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= button_to 'Back to Admin Dashboard', admin_authenticated_root_path, method: :get, class: 'btn btn-secondary' %>

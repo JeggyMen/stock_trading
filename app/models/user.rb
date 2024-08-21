@@ -13,9 +13,23 @@ class User < ApplicationRecord
   after_create :send_welcome_email
   after_create :send_pending_approval_email
   before_update :send_approval_email, if: :approved_changed?
+  after_initialize :set_default_balance, if: :new_record?
 
   has_many :user_stocks
   has_many :stocks, through: :user_stocks
+  has_many :transactions
+
+  def remaining_quantity
+    record = {}
+
+    user.stocks.each do |stock|
+      buy_quantity = consolidated_transactions[[stock.id, 'buy']] || 0
+      sell_quantity = consolidated_transactions[[stock.id, 'sell']] || 0
+      record[stock.id] = buy_quantity - sell_quantity
+    end
+    puts "record: #{record}"
+    record
+  end
   
   private
 
@@ -53,5 +67,9 @@ class User < ApplicationRecord
     if self.approved && self.approved_changed?
       UserMailer.approval_email(self).deliver_later
     end
+  end
+
+  def set_default_balance
+    self.balance ||= 5000.0
   end
 end

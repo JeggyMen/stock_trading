@@ -1,23 +1,69 @@
-<h1>Trader Dashboard</h1>
-<p>Welcome to your dashboard, <%= current_user.email.split('@').first %>!</p>
+<h2>Welcome to your dashboard, <%= current_user.email %>!</h2>
 
-<h2>My Portfolio</h2>
+<p>Current Balance: <%= number_to_currency(current_user.balance, unit: "₱") %></p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Symbol</th>
-      <th>Price</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @stocks.each do |stock| %>
+<h3>My Portfolio (Stocks Available to Buy)</h3>
+<% if @stocks.any? %>
+  <table>
+    <thead>
       <tr>
-        <td><%= stock.symbol %></td>
-        <td><%= stock.price %></td>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @stocks.each do |stock| %>
+        <tr>
+          <td><%= stock.symbol %></td>
+          <td><%= number_to_currency(stock.price, unit: "₱") %></td>
+          <td>
+            <%= form_with url: buy_stock_path(stock), method: :post, local: true do %>
+              <%= number_field_tag :quantity, 1, min: 1, required: true %>
+              <%= submit_tag 'Buy', class: 'btn btn-primary' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No stocks available.</p>
+<% end %>
 
-<%= link_to 'View Stocks List', stocks_index_path %>
+<h3>My Transactions </h3>
+<% if @transactions.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total Value</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @transactions.each do |transaction| %>
+        <tr>
+          <td><%= transaction[:symbol] %></td>
+          <td><%= number_to_currency(transaction[:price], unit: "₱") %></td>
+          <td><%= transaction[:quantity] %></td>
+          <td><%= number_to_currency(transaction[:total_value], unit: "₱") %></td>
+          <td>
+            <%= form_with url: sell_stock_path(transaction[:stock_id]), method: :post, local: true do %>
+              <%= number_field_tag :quantity, 1, min: 1, required: true %>
+              <%= submit_tag 'Sell', class: 'btn btn-danger' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No transactions yet.</p>
+<% end %>
+
+
+<%= button_to 'View Transaction History', clients_history_path, method: :get %>
+<%= button_to 'View Stocks List', stocks_path, method: :get %>

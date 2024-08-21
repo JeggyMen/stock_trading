@@ -1,0 +1,29 @@
+<h2>Pending Traders</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Created At</th>
+      <th>Approve</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @pending_traders.present? %>
+      <% @pending_traders.each do |trader| %>
+        <tr>
+          <td><%= trader.email %></td>
+          <td><%= trader.created_at.strftime('%B %d, %Y') %></td>
+          <td>
+            <%= button_to 'Approve', approve_admin_user_path(trader), method: :get, remote: true, data: { confirm: 'Are you sure?' } %>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan="3">No pending traders found.</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= button_to 'Back to Admin Dashboard', admin_authenticated_root_path, method: :get, class: 'btn btn-secondary' %>

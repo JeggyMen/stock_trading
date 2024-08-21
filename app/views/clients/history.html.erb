@@ -1,0 +1,30 @@
+<h3>My Transaction History</h3>
+<% if @history.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>Quantity</th>
+
+        <th>Transaction Type</th>
+        <th>Total Value</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @history.each do |transaction| %>
+        <tr>
+          <td><%= transaction.stock.symbol %></td>
+          <td><%= number_to_currency(transaction.price, unit: "₱") %></td>
+          <td><%= transaction.quantity %></td>
+          <td><%= transaction.transaction_type %></td>
+          <td><%= number_to_currency(transaction.quantity * transaction.price, unit: "₱") %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p>No History yet.</p>
+<% end %>
+
+<%= button_to 'Back to Dashboard', client_dashboard_path, method: :get %>

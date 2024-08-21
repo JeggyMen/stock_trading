@@ -30,7 +30,7 @@ RSpec.describe "Admin::Users", type: :request do
     end
   end
 
-  describe "UPDATE /admin/users/:id" do
+  describe "PATCH /admin/users/:id" do
     it "updates the user's details" do
       patch admin_user_path(trader1), params: { user: { email: 'newemail@example.com' } }
       expect(response).to redirect_to(admin_authenticated_root_path)
@@ -49,24 +49,19 @@ RSpec.describe "Admin::Users", type: :request do
   end
 
   describe "GET /admin/dashboard" do
-  before do
-    pending_trader.update(approved: false)
-    approved_trader.update(approved: true)
-  end
+    before do
+      pending_trader.update(approved: false)
+      approved_trader.update(approved: true)
+    end
 
-  it "displays all traders" do
-    get admin_authenticated_root_path
-    expect(response).to have_http_status(:ok)
-    expect(response.body).to include(trader1.email)
-    expect(response.body).to include(trader2.email)
-  end
+    it "displays all approved traders" do
+      get admin_authenticated_root_path
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include(approved_trader.email)
+      expect(response.body).not_to include(pending_trader.email)
+    end
 
-  it "displays only pending traders" do
-    get admin_authenticated_root_path
-    expect(response).to have_http_status(:ok)
-    expect(response.body).to include(pending_trader.email)
   end
-end
 
   describe "GET /admin/users/:id/approve" do
     it "approves a pending trader" do

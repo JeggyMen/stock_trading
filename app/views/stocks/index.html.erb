@@ -1,4 +1,3 @@
-<!-- app/views/stocks/index.html.erb -->
 <h1>Stocks List</h1>
 
 <% if flash[:notice] %>
@@ -12,20 +11,20 @@
     <tr>
       <th>Symbol</th>
       <th>Price</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
     <% @stocks.each do |stock| %>
       <tr>
         <td><%= stock.symbol %></td>
-        <td><%= stock.price %></td>
+        <td><%= number_to_currency(stock.price, unit: "₱") %></td>
         <td>
-          <%= link_to 'Buy', add_to_portfolio_stock_path(stock), method: :post %>
+          <%= button_to 'Add to Portfolio', add_to_portfolio_stock_path(stock), method: :post %>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
 
-<%= link_to 'Back to Dashboard', client_dashboard_path %>
-
+<%= button_to 'Back to Dashboard', client_dashboard_path, method: :get %>

@@ -2,9 +2,9 @@ class Admin::UsersController < ApplicationController
     before_action :authenticate_user!
     before_action :authorize_admin!
     before_action :set_user, only: [:show, :edit, :update , :approve  ]
-  
-    def dashboard
-      @pending_traders = User.where(role: 'trader', approved: false)
+
+    def pending
+      @pending_traders = User.trader.where(role: 'trader', approved: false)
     end
 
     def new
